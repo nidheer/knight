@@ -175,30 +175,30 @@
 
           <div class="col-lg-4">
             <div class="portfolio-info">
-            <?php
-ini_set('display_errors', 1);
+            <?phpini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+/*
 $host = "localhost";
 $username = "root";
 $password = "";
 $database = "portal";
 
 // Create a MySQLi object and establish the database connection
-$mysqli = new mysqli($host, $username, $password, $database);
+$conn = new mysqli($host, $username, $password, $database);
 
 // Check for connection errors
-if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+if ($conn->connect_errno) {
+    echo "Failed to connect to MySQL: " . $conn->connect_error;
     exit();
-}
+}*/
+include('db.php');
 
 $uid = $_POST['uid'];
 $name = $_POST['name'];
 
 $uidQuery = "SELECT amount FROM accountbal WHERE uid = ?";
-$stmt1 = $mysqli->prepare($uidQuery);
+$stmt1 = $conn->prepare($uidQuery);
 $stmt1->bind_param("s", $uid);
 $stmt1->execute();
 $result1 = $stmt1->get_result();
@@ -215,7 +215,7 @@ if ($result1->num_rows === 0) {
 
     // Insert into the creditcard table
     $insertQuery = "INSERT INTO creditcard (name, uid, amount, invoiceid) VALUES (?, ?, ?, ?)";
-    $stmt = $mysqli->prepare($insertQuery);
+    $stmt = $conn->prepare($insertQuery);
     $stmt->bind_param("ssii", $name, $uid, $amount, $invoiceId);
 
     $stmt->execute();
@@ -227,7 +227,7 @@ if ($result1->num_rows === 0) {
         // Insert invoice ID and UID into the 'invoice' table
         $invoiceDate = date("Y-m-d"); // Assuming the current date as the invoice date
         $insertInvoiceQuery = "INSERT INTO invoice (invoiceid, uid, invoicedate) VALUES (?, ?, ?)";
-        $stmt5 = $mysqli->prepare($insertInvoiceQuery);
+        $stmt5 = $conn->prepare($insertInvoiceQuery);
         $stmt5->bind_param("iss", $invoiceId, $uid, $invoiceDate);
         $stmt5->execute();
 
@@ -238,7 +238,7 @@ if ($result1->num_rows === 0) {
         $salesDate = date("Y-m-d"); // Assuming the current date as the sales date
 
         $insertQuery = "INSERT INTO sales (invoiceid, merchantid, amount, salesdate) VALUES (?, ?, ?, ?)";
-        $stmt4 = $mysqli->prepare($insertQuery);
+        $stmt4 = $conn->prepare($insertQuery);
         $stmt4->bind_param("iids", $invoiceId, $merchantId, $amount, $salesDate);
         $stmt4->execute();
 
@@ -274,11 +274,12 @@ if (isset($stmt4)) {
     $stmt4->close();
 }
 
-$mysqli->close();
+$conn->close();
 
 if (isset($errorOccurred) && $errorOccurred) {
     die(); // Terminate the script execution if an error occurred
 }
+
 ?>
 
             </div>

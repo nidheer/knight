@@ -223,7 +223,7 @@
             </div>
           </div>
           <?php
-
+/*
                 $host = "localhost";
                 $username = "root";
                 $password = "";
@@ -237,7 +237,8 @@
                 echo "Failed to connect to MySQL: " . $mysqli->connect_error;
                 exit();
                 }
-
+*/
+include('db1.php');
                 // Retrieve form inputs
                 $uid = $_POST['uid'];
                 $merchantId = $_POST['merchant_id'];

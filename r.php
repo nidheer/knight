@@ -174,7 +174,7 @@
           <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
+/*
 // Assuming you have the necessary database connection details
 $host = "localhost";
 $username = "root";
@@ -189,7 +189,8 @@ if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: " . $mysqli->connect_error;
     exit();
 }
-
+*/
+include('db1.php');
 // Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve the gift card code and UID from the form

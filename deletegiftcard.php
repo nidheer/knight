@@ -173,53 +173,47 @@
           </div>
 
           <?php
-// Assuming you have a database connection established
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "portal";
-
-// Create a MySQLi object and establish the database connection
-$mysqli = new mysqli($host, $username, $password, $database);
-
+          include('db.php');
 // Check for connection errors
-if ($mysqli->connect_errno) {
-  echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-  exit();
+/*
+if ($conn->connect_errno) {
+    echo "Failed to connect to MySQL: " . $conn->connect_error;
+    exit();
 }
-
+*/
 // Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Retrieve the gift card code from the form
-  $giftCardCode = $_POST["code"];
+    // Retrieve the gift card code from the form
+    $giftCardCode = $_POST["code"];
 
-  // Prepare a SQL query to delete the gift card row from the database
-  $sql = "DELETE FROM giftcard WHERE code = ?";
-  $stmt = $mysqli->prepare($sql);
-  $stmt->bind_param('s', $giftCardCode);
-  $stmt->execute();
+    // Prepare a SQL query to delete the gift card row from the database
+    $sql = "DELETE FROM giftcard WHERE code = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('s', $giftCardCode);
+    $stmt->execute();
 
-  // Check if the row was deleted successfully
-  if ($stmt->affected_rows > 0) {
-    echo '<div class="col-lg-4">';
-    echo '  <div class="portfolio-info">';
-    echo '<div class="success-message">';
-    echo "Your gift card has been redeemed successfully.";
-    echo '</div>';
-  } else {
-    echo '<div class="col-lg-4">';
-    echo '  <div class="portfolio-info">';
-    echo '<div class="error-message">';
-    echo "Unable to redeem gift card .  Try re entering a different code <a href=\"redeemgiftcard.html\">here</a>. <br> Or Purchase a gift card <a href=\"gift.html\">here</a>.";
-    echo '</div>';
-  }
-  
-  // Close the statement
-  $stmt->close();
+    // Check if the row was deleted successfully
+    if ($stmt->affected_rows > 0) {
+        echo '<div class="col-lg-4">';
+        echo '  <div class="portfolio-info">';
+        echo '<div class="success-message">';
+        echo "Your gift card has been redeemed successfully.";
+        echo '</div>';
+    } else {
+        echo '<div class="col-lg-4">';
+        echo '  <div class="portfolio-info">';
+        echo '<div class="error-message">';
+        echo "Unable to redeem gift card. Try re-entering a different code <a href=\"redeemgiftcard.html\">here</a>. <br> Or Purchase a gift card <a href=\"gift.html\">here</a>.";
+        echo '</div>';
+    }
+
+    // Close the statement
+    $stmt->close();
 }
 
 // Close the database connection
-$mysqli->close();
+$conn->close();
+
 ?>
           </div>
 

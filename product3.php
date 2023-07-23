@@ -225,7 +225,7 @@
             </div>
           </div>
           <?php
-
+/*
 $host = "localhost";
 $username = "root";
 $password = "";
@@ -238,7 +238,8 @@ $mysqli = new mysqli($host, $username, $password, $database);
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: " . $mysqli->connect_error;
     exit();
-}
+}*/
+include('db1.php');
 $uid = $_POST['uid'];
 
 $uidQuery = "SELECT amount FROM accountbal WHERE uid = ?";

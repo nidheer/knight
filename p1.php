@@ -189,24 +189,25 @@
 
         
              <?php
-
+/*
                 $host = "localhost";
                 $username = "root";
                 $password = "";
                 $database = "portal";
 
-                // Create a MySQLi object and establish the database connection
-                $mysqli = new mysqli($host, $username, $password, $database);
+                // Create a conn object and establish the database connection
+                $conn = new conn($host, $username, $password, $database);
 
                 // Check for connection errors
-                if ($mysqli->connect_errno) {
-                    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+                if ($conn->connect_errno) {
+                    echo "Failed to connect to MySQL: " . $conn->connect_error;
                     exit();
-                }
+                }*/
+                include('db.php');
                 $uid = $_POST['uid'];
 
                 $uidQuery = "SELECT amount FROM accountbal WHERE uid = ?";
-                $stmt1 = $mysqli->prepare($uidQuery);
+                $stmt1 = $conn->prepare($uidQuery);
                 $stmt1->bind_param("s", $uid);
                 $stmt1->execute();
                 $result1 = $stmt1->get_result();
@@ -234,7 +235,7 @@
                     $newAmount = $currentAmount - $amount;
                 
                     $updateQuery = "UPDATE accountbal SET amount = ? WHERE uid = ?";
-                    $stmt2 = $mysqli->prepare($updateQuery);
+                    $stmt2 = $conn->prepare($updateQuery);
                     $stmt2->bind_param("ds", $newAmount, $uid);
                     $stmt2->execute();
                 
@@ -245,7 +246,7 @@
 
                     $invoiceDate = date("Y-m-d"); // Assuming the current date as the invoice date
                     $insertInvoiceQuery = "INSERT INTO invoice (invoiceid, uid, invoicedate) VALUES (?, ?, ?)";
-                    $stmt5 = $mysqli->prepare($insertInvoiceQuery);
+                    $stmt5 = $conn->prepare($insertInvoiceQuery);
                     $stmt5->bind_param("iss", $invoiceId, $uid, $invoiceDate);
                     $stmt5->execute();
 
@@ -255,7 +256,7 @@
                     $merchantId = 100; // Set the merchant ID directly to 100
                 
                     $merchantQuery = "SELECT * FROM merchant WHERE merchantid = ?";
-                    $stmt3 = $mysqli->prepare($merchantQuery);
+                    $stmt3 = $conn->prepare($merchantQuery);
                     $stmt3->bind_param("i", $merchantId);
                     $stmt3->execute();
                     $result3 = $stmt3->get_result();
@@ -273,7 +274,7 @@
                 
                     $insertQuery = "INSERT INTO sales (invoiceid, merchantid, amount, salesdate) VALUES (?, ?, ?, ?)";
                 
-                    $stmt4 = $mysqli->prepare($insertQuery);
+                    $stmt4 = $conn->prepare($insertQuery);
                     $stmt4->bind_param("iids", $invoiceId, $merchantId, $amount, $salesDate);
                     $stmt4->execute();
                 
@@ -286,7 +287,7 @@
                     }
                 
                     // Close the database connection
-                    $mysqli->close();
+                    $conn->close();
                     echo '<div class="col-lg-4">';
                     echo '  <div class="portfolio-info">';
                               

@@ -223,7 +223,7 @@
             </div>
           </div>
           <?php
-
+/*
                 $host = "localhost";
                 $username = "root";
                 $password = "";
@@ -236,7 +236,8 @@
                 if ($mysqli->connect_errno) {
                     echo "Failed to connect to MySQL: " . $mysqli->connect_error;
                     exit();
-                }
+                }*/
+                include('db1.php');
 
                 // Check UID against 'accountbal' table
                 $uid = $_POST['uid'];

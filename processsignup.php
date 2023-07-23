@@ -156,8 +156,8 @@
                 <form class="signup-form" >
                 <?php
 
-$conn = mysqli_connect('localhost', 'root', '', 'portal');
-
+//$conn = mysqli_connect('localhost', 'root', '', 'portal');
+include('db.php');
 function generateRandomNumber() {
     $min = 100000; // Minimum 6-digit number
     $max = 999999; // Maximum 6-digit number

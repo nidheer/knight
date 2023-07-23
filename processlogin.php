@@ -32,6 +32,7 @@
         <div class="error-box">
      
         <?php
+        /*
 $host = "localhost";
 $user = "root";
 $password = ""; 
@@ -41,7 +42,8 @@ $conn = mysqli_connect($host, $user, $password, $db);
 if(!$conn) {
   die("Connection failed: " . mysqli_connect_error());
 }
-
+*/
+include('db.php');
 if(isset($_POST['save']))
 {
   session_start();

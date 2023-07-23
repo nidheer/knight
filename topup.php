@@ -174,7 +174,7 @@
                       <?php
             error_reporting(E_ALL);
             ini_set('display_errors', 1);
-
+/*
             // Assuming you have already established a database connection
             $servername = "localhost";
             $username = "root";
@@ -188,7 +188,8 @@
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
-
+*/
+include('db.php');
             // Get the user inputs from the HTML form
             $id = $_POST['id'];
             $cvv = $_POST['cvv'];

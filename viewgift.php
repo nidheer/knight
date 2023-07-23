@@ -180,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Get the UID input from the form
     $uid = $_POST["uid"];
 
-
+/*
     // Connect to the database (update credentials as needed)
     $host = "localhost";
     $username = "root";
@@ -194,7 +194,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($conn->connect_errno) {
       echo "Failed to connect to MySQL: " . $conn->connect_error;
       exit();
-    }
+    }*/
+    include('db.php');
 
     // Prepare and execute the database query
     $sql = "SELECT code, amount FROM giftcard WHERE uid = ?";

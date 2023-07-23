@@ -227,7 +227,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+/*
                 $host = "localhost";
                 $username = "root";
                 $password = "";
@@ -241,6 +241,8 @@ error_reporting(E_ALL);
                     echo "Failed to connect to MySQL: " . $mysqli->connect_error;
                     exit();
                 }
+                */
+                include('db1.php');
                 $uid = $_POST['uid'];
 
                 $uidQuery = "SELECT amount FROM accountbal WHERE uid = ?";

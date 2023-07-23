@@ -171,10 +171,9 @@
               <div class="swiper-pagination"></div>
             </div>
           </div>
-          <?php
-error_reporting(E_ALL);
+          <?phperror_reporting(E_ALL);
 ini_set('display_errors', 1);
-
+/*
 // Assuming you have already established a database connection
 $servername = "localhost";
 $username = "root";
@@ -182,13 +181,16 @@ $password = "";
 $database = "portal";
 
 // Create a new MySQLi object
-$conn = new mysqli($servername, $username, $password, $database);
+$mysqli = new mysqli($servername, $username, $password, $database);
 
 // Check the connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
 }
-function generateRandomNumber() {
+*/
+include('db.php');
+function generateRandomNumber()
+{
     $min = 1000; // Minimum 4-digit number
     $max = 9999; // Maximum 4-digit number
     return str_pad(mt_rand($min, $max), 4, '0', STR_PAD_LEFT);
@@ -197,9 +199,9 @@ function generateRandomNumber() {
 $uniqueNumber = generateRandomNumber();
 
 $query = "SELECT * FROM giftcard WHERE code = '$uniqueNumber'";
-$result = mysqli_query($conn, $query);
+$result = mysqli_query($mysqli, $query);
 if (!$result) {
-    die('Error executing query: ' . mysqli_error($conn));
+    die('Error executing query: ' . mysqli_error($mysqli));
 }
 if (mysqli_num_rows($result) > 0) {
     $uniqueNumber = generateRandomNumber();
@@ -211,74 +213,75 @@ $amount = $_POST['amount'];
 
 // Query the database to check the account balance
 $query = "SELECT amount FROM accountbal WHERE uid = '$id'";
-$result = $conn->query($query);
+$result = $mysqli->query($query);
 
 if ($result) {
-  $row = $result->fetch_assoc();
-  $accountBalance = $row['amount'];
+    $row = $result->fetch_assoc();
+    $accountBalance = $row['amount'];
 
-  // Check if the requested amount is available
-  if ($accountBalance >= $amount) {
-    // Calculate the new account balance
-    $newBalance = $accountBalance - $amount;
+    // Check if the requested amount is available
+    if ($accountBalance >= $amount) {
+        // Calculate the new account balance
+        $newBalance = $accountBalance - $amount;
 
-    // Begin a transaction
-    $conn->begin_transaction();
+        // Begin a transaction
+        $mysqli->begin_transaction();
 
-    // Update the cards table with the new account balance
-    $updateQuery = "UPDATE accountbal SET amount = '$newBalance' WHERE uid = '$id'";
-    $updateResult = $conn->query($updateQuery);
+        // Update the cards table with the new account balance
+        $updateQuery = "UPDATE accountbal SET amount = '$newBalance' WHERE uid = '$id'";
+        $updateResult = $mysqli->query($updateQuery);
 
-    // Update the accountbal table with the deducted amount
-    $sql="INSERT INTO giftcard (uid,code,amount) VALUES ('$id','$uniqueNumber','$amount')";
-    $result=$conn->query($sql);
-    if ($updateResult && $result) {
-      // Commit the transaction
-      $conn->commit();
-      echo '<div class="col-lg-4">';
-      echo '  <div class="portfolio-info">';
-      echo '<div class="success-message">';
-      echo "Amount deducted successfully. New balance: $newBalance";
-      echo '</div>';
-      echo '<div class="success-message">';
-      echo "Your gift card code is $uniqueNumber . <br>
-      Please remember your code to be able to redeem the gift card <br> <br>
-      ";
-      echo '</div>';
+        // Update the accountbal table with the deducted amount
+        $sql = "INSERT INTO giftcard (uid,code,amount) VALUES ('$id','$uniqueNumber','$amount')";
+        $result = $mysqli->query($sql);
+        if ($updateResult && $result) {
+            // Commit the transaction
+            $mysqli->commit();
+            echo '<div class="col-lg-4">';
+            echo '  <div class="portfolio-info">';
+            echo '<div class="success-message">';
+            echo "Amount deducted successfully. New balance: $newBalance";
+            echo '</div>';
+            echo '<div class="success-message">';
+            echo "Your gift card code is $uniqueNumber . <br>
+            Please remember your code to be able to redeem the gift card <br> <br>
+            ";
+            echo '</div>';
+        } else {
+            // Rollback the transaction
+            $mysqli->rollback();
+            echo '<div class="col-lg-4">';
+            echo '  <div class="portfolio-info">';
+            echo '<div class="error-message">';
+            echo "Failed to update the account balance. <br>
+            An error has occurred while updating your balance. <br>
+            Please try re-purchasing your gift card <a href=\"gift.html\">here</a>.  <br>
+            Or you can check your Account Balance <a href=\"account.html\">here</a>. ";
+            // Display MySQL error message
+            echo "MySQL Error: " . $mysqli->error;
+            echo '</div>';
+        }
     } else {
-      // Rollback the transaction
-      $conn->rollback();
-      echo '<div class="col-lg-4">';
-      echo '  <div class="portfolio-info">';
-      echo '<div class="error-message">';
-      echo "Failed to update the account balance. <br>
-      An error has occured while updating your balance. <br>
-      Please try re purchase your gift card <a href=\"gift.html\">here</a>.  <br>
-      Or you can check your Account Balance <a href=\"account.html\">here</a>. ";
-      // Display MySQL error message
-      echo "MySQL Error: " . $conn->error;
-      echo '</div>';
+        echo '<div class="col-lg-4">';
+        echo '  <div class="portfolio-info">';
+        echo '<div class="error-message">';
+        echo "Insufficient funds.<br><br> Please ensure that you have enough credit on your account to continue <br> <br>
+        You can proceed by Top Up your account  <br> <a href=\"topup.html\">here</a>. ";
+        echo '</div>';
     }
-  } else {
+} else {
     echo '<div class="col-lg-4">';
     echo '  <div class="portfolio-info">';
     echo '<div class="error-message">';
-    echo "Insufficient funds.<br><br> Please ensure that you have enough credit on your account to continue <br> <br>
-    You can proceed by Top Up your account  <br> <a href=\"topup.html\">here</a>. ";
+    echo "Failed to retrieve the account balance.";
+    // Display MySQL error message
+    echo "MySQL Error: " . $mysqli->error;
     echo '</div>';
-  }
-} else {
-  echo '<div class="col-lg-4">';
-  echo '  <div class="portfolio-info">';
-  echo '<div class="error-message">';
-  echo "Failed to retrieve the account balance.";
-  // Display MySQL error message
-  echo "MySQL Error: " . $conn->error;
-  echo '</div>';
 }
 
 // Close the database connection
-$conn->close();
+$mysqli->close();
+
 ?>
 
 

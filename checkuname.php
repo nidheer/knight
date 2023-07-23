@@ -1,4 +1,5 @@
 <?php
+/*
 $host = "127.0.0.1";
 $user = "root";
 $password = "";
@@ -11,12 +12,13 @@ $con = new mysqli($host, $user, $password, $database);
 if ($con->connect_error) {
     die("Problem to connect: " . $con->connect_error);
 }
-
+*/
+include('db.php');
 $uname = $_POST['username'];
 
 // Prepare the SQL statement with a parameterized query
 $sql = "SELECT * FROM reg WHERE uname = ?";
-$stmt = $con->prepare($sql);
+$stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $uname);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -28,5 +30,5 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
-$con->close();
+$conn->close();
 ?>

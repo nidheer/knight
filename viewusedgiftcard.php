@@ -178,7 +178,7 @@
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Get the code input from the form
     $code = $_POST["code"];
-
+/*
     // Connect to the database (update credentials as needed)
     $host = "localhost";
     $username = "root";
@@ -192,7 +192,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($conn->connect_errno) {
       echo "Failed to connect to MySQL: " . $conn->connect_error;
       exit();
-    }
+    }*/
+    include('db.php');
     
     // Prepare and execute the database queries
     $stmt = $conn->prepare("SELECT amount FROM giftcard WHERE code = ?");

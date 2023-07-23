@@ -179,6 +179,7 @@
             <div class="portfolio-info">
                 <!-- process.php -->
 <?php
+/*
 $host = "localhost";
 $username = "root";
 $password = "";
@@ -189,7 +190,8 @@ $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_errno) {
     echo "Failed to connect to MySQL: " . $conn->connect_error;
     exit();
-}
+}*/
+include('db.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $uid = $_POST['uid'];

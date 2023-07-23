@@ -5,6 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $selectedMonth = $_POST["month"];
 
   // Database connection details
+  /*
   $servername = "localhost";
   $username = "root";
   $password = "";
@@ -17,6 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
   }
+*/
+include('db.php');
 
   if (isset($_POST['save'])) {
     $name = $_POST['name'];
